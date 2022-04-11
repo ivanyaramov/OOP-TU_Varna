@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
 	// write your code here
-    FileManager fileManager = new FileManager();
-    fileManager.openFile("output.xml");
+String path = "C:\\Temp\\file.xml";
+        System.out.println(StringHandler.trimFileName(path));
     }
 }
