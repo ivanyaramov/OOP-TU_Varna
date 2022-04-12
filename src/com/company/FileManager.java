@@ -1,8 +1,8 @@
 package com.company;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import com.company.exceptions.FileNotOpenedException;
+
+import java.io.*;
 
 public class FileManager {
     private File file;
@@ -36,6 +36,23 @@ public class FileManager {
         FileWriter myWriter = new FileWriter(path);
         myWriter.write(content);
         myWriter.close();
+    }
+
+    public String readFile() throws FileNotOpenedException, IOException {
+        if(isFileOpened()){
+            StringBuilder resultStringBuilder = new StringBuilder();
+            InputStream inputStream = new FileInputStream(file);
+            BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    resultStringBuilder.append(line).append("\n");
+                }
+
+            return resultStringBuilder.toString();
+        }
+        else{
+            throw new FileNotOpenedException("File  must be opened before reading");
+        }
     }
 
     public String getPath() {

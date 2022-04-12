@@ -14,7 +14,8 @@ public class CommandHandler {
     }
     private void manageCommands() throws IOException, FileNotClosedException, FileNotOpenedException {
     Scanner scanner = new Scanner(System.in);
-    while(true){
+    boolean toBreak = false;
+    while(!toBreak){
         System.out.println("Please enter a command:");
         String fullCommand = scanner.nextLine();
         String[] splittedCommand = fullCommand.split(" ");
@@ -35,6 +36,24 @@ public class CommandHandler {
                 break;
             case "close":
                 close();
+                break;
+            case "save":
+                save();
+                break;
+            case "saveas":
+                if(length<2){
+                    illegalComand();
+                }
+                else{
+                    saveAs(splittedCommand[1]);
+                }
+                break;
+            case "exit":
+                toBreak = true;
+                break;
+            default:
+                illegalComand();
+                break;
         }
     }
     }
