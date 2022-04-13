@@ -1,12 +1,19 @@
 package com.company;
 
+import com.company.exceptions.FileNotOpenedException;
+
+import java.io.FileReader;
 import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, FileNotOpenedException {
 	// write your code here
-String path = "C:\\Temp\\file.xml";
-        System.out.println(StringHandler.trimFileName(path));
+String path = "output.xml";
+FileManager fileManager = new FileManager();
+fileManager.openFile(path);
+String content = fileManager.readFile();
+XMLRepresentation xmlRepresentation = XMLHandler.convertStringToXMLObjects(content);
+        System.out.println();
     }
 }

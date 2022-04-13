@@ -9,10 +9,12 @@ public class StringHandler {
         return arr[arr.length - 1];
     }
 
-    public static int findTag(String content, int startIndex, String saveHere) {
+    public static String findTag(String content, StartIndexKeeper startIndexKeeper) {
+        String saveHere = "";
         int start = -1;
         int end = -1;
-        for (int i = 0; i < content.length(); i++) {
+        int startIndex = startIndexKeeper.getStartIndex();
+        for (int i = startIndex; i < content.length(); i++) {
             char current = content.charAt(i);
             if (current == '<') {
                 start = i;
@@ -23,41 +25,46 @@ public class StringHandler {
             }
         }
         saveHere = content.substring(start, end + 1);
-        return end + 1;
+        startIndexKeeper.setStartIndex(end + 1);
+        return saveHere;
     }
 
     public static boolean isTagClosed(String content) {
         return content.charAt(content.length() - 2) == '/';
     }
 
-    public static void trimTagName(String content, String saveHere) {
-        StringHandler.trimXMLChars(content, saveHere);
+    public static String trimTagName(String content) {
+       String saveHere = StringHandler.trimXMLChars(content);
         String[] splitContent = saveHere.split(" ");
         saveHere = splitContent[0];
+        return saveHere;
     }
 
-    public static void trimXMLChars(String content, String saveHere) {
+    public static String trimXMLChars(String content) {
+        String saveHere = "";
         if (StringHandler.isClosingTag(content)) {
             saveHere = content.substring(2, content.length() - 1);
-            return;
+            return saveHere;
         }
         if (StringHandler.isTagClosed(content)) {
             saveHere = content.substring(1, content.length() - 2);
         } else {
             saveHere = content.substring(1, content.length() - 1);
         }
+        return saveHere;
     }
 
     public static boolean isClosingTag(String content) {
         return content.charAt(1) == '/';
     }
 
-    public static boolean followedByNewTag(String content, int startIndex) {
-        return content.charAt(startIndex) == '<';
+    public static boolean followedByNewTag(String content, StartIndexKeeper startIndexKeeper) {
+        return content.charAt(startIndexKeeper.getStartIndex()) == '<';
     }
 
     public static Map<String, String> getAttributesOfTag(String content) {
         Map<String, String> map = new LinkedHashMap<>();
+        content = StringHandler.trimXMLChars(content);
         String[] splitContent = content.split(" ");
 
         for (int i = 1; i < splitContent.length; i++) {
@@ -65,7 +72,7 @@ public class StringHandler {
             String[] keyValueSplit = keyValue.split("=");
             String key = keyValueSplit[0];
             String value = keyValueSplit[1];
-            StringHandler.trimQuoteMarks(value);
+            value = StringHandler.trimQuoteMarks(value);
             map.put(key, value);
 
         }
@@ -75,20 +82,21 @@ public class StringHandler {
         return null;
     }
 
-    public static void trimQuoteMarks(String content) {
-        content = content.substring(1, content.length() - 1);
+    public static String trimQuoteMarks(String content) {
+        return content.substring(1, content.length() - 1);
     }
 
-    public static int findTagValue(String content, int startIndex, String saveHere){
+    public static String findTagValue(String content, StartIndexKeeper startIndexKeeper){
         int end = -1;
+        int startIndex = startIndexKeeper.getStartIndex();
         for(int i=startIndex;i< content.length();i++){
             char current = content.charAt(i);
             if(current == '<'){
                 end = i;
             }
         }
-        saveHere = content.substring(startIndex, end);
-        return end;
+        startIndexKeeper.setStartIndex(end);
+        return content.substring(startIndex, end);
     }
 
 }
