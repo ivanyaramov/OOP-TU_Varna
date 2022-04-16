@@ -93,6 +93,7 @@ public class StringHandler {
             char current = content.charAt(i);
             if(current == '<'){
                 end = i;
+                break;
             }
         }
         startIndexKeeper.setStartIndex(end);
