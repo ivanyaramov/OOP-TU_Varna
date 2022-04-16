@@ -2,6 +2,7 @@ package com.company;
 
 import java.util.ArrayDeque;
 import java.util.Map;
+import java.util.Set;
 
 public class XMLHandler {
     public static XMLRepresentation convertStringToXMLObjects(String content) {
@@ -27,6 +28,9 @@ public class XMLHandler {
 
             boolean isClosed = StringHandler.isTagClosed(wholeTag);
             if (isClosed) {
+                if (stack.isEmpty()) {
+                    xmlRepresentation.addChild(element);
+                }
                 continue;
             }
 
@@ -42,4 +46,25 @@ public class XMLHandler {
         }
         return xmlRepresentation;
     }
+
+    public static String convertXMLObjectsToString(XMLRepresentation xmlRepresentation){
+        StringBuilder sb = new StringBuilder();
+        for(int i=0; i< xmlRepresentation.getListOfElements().size(); i++){
+        StringHandler.addElementsToStringBuilder(xmlRepresentation.getListOfElements().get(i), sb, 0);
+        }
+        return sb.toString();
+    }
+
+    public static Set<String> findDuplicatingIds(XMLRepresentation xmlRepresentation){
+        for(int i=0; i< xmlRepresentation.getListOfElements().size(); i++){
+
+        }
+
+    }
+
+    public static void findDuplicatingIdsInChildElements(XMLElement xmlElement){
+
+    }
+
+
 }

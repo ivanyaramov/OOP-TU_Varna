@@ -100,4 +100,56 @@ public class StringHandler {
         return content.substring(startIndex, end);
     }
 
+    public static void addElementsToStringBuilder(XMLElement xmlElement, StringBuilder sb, int level){
+        StringHandler.addSpaces(level, sb);
+        sb.append("<");
+        sb.append(xmlElement.getName());
+        boolean hasAttributes = xmlElement.getAttributes() != null;
+        if(hasAttributes){
+            addAttributesToStringBuilder(xmlElement.getAttributes(), sb);
+        }
+        if(xmlElement.getValue() == null && xmlElement.getChildren().size() == 0){
+            sb.append("/>");
+            sb.append(System.lineSeparator());
+            return;
+        }
+        sb.append(">");
+        if(xmlElement.getValue()!= null){
+            sb.append(xmlElement.getValue());
+            StringHandler.addClosingTagToStribgBuilder(sb, xmlElement.getName());
+        }
+        else{
+            sb.append(System.lineSeparator());
+            for(int i=0; i<xmlElement.getChildren().size(); i++){
+                StringHandler.addElementsToStringBuilder(xmlElement.getChildren().get(i), sb, level + 1);
+            }
+            StringHandler.addSpaces(level, sb);
+            StringHandler.addClosingTagToStribgBuilder(sb, xmlElement.getName());
+        }
+
+    }
+
+    private static void addAttributesToStringBuilder(Map<String, String> map, StringBuilder sb){
+        for (Map.Entry<String, String> stringStringEntry : map.entrySet()) {
+            sb.append(" ");
+            sb.append(stringStringEntry.getKey());
+            sb.append("=\"");
+            sb.append(stringStringEntry.getValue());
+            sb.append("\"");
+        }
+    }
+
+    private static void addSpaces(int level, StringBuilder sb){
+        for(int i=0; i<level; i++){
+            sb.append("   ");
+        }
+    }
+
+    private static void addClosingTagToStribgBuilder(StringBuilder sb, String name){
+        sb.append("</");
+        sb.append(name);
+        sb.append(">");
+        sb.append(System.lineSeparator());
+    }
+
 }

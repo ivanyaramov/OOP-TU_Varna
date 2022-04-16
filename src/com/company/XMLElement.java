@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 public class XMLElement {
-    Map<String, String> attributes;
-    String value;
-    String name;
-    List<XMLElement> children;
+    private Map<String, String> attributes;
+    private String value;
+    private String name;
+    private List<XMLElement> children;
 
 
 

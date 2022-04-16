@@ -13,4 +13,8 @@ public class XMLRepresentation {
     public void addChild(XMLElement xmlElement){
         this.listOfElements.add(xmlElement);
     }
+
+    public List<XMLElement> getListOfElements() {
+        return listOfElements;
+    }
 }

@@ -14,6 +14,6 @@ FileManager fileManager = new FileManager();
 fileManager.openFile(path);
 String content = fileManager.readFile();
 XMLRepresentation xmlRepresentation = XMLHandler.convertStringToXMLObjects(content);
-        System.out.println();
+        System.out.println(XMLHandler.convertXMLObjectsToString(xmlRepresentation));
     }
 }
