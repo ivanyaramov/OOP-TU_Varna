@@ -14,6 +14,7 @@ FileManager fileManager = new FileManager();
 fileManager.openFile(path);
 String content = fileManager.readFile();
 XMLRepresentation xmlRepresentation = XMLHandler.convertStringToXMLObjects(content);
+XMLHandler.setUnDublicatingIdsToElements(xmlRepresentation);
         System.out.println(XMLHandler.convertXMLObjectsToString(xmlRepresentation));
     }
 }

@@ -1,8 +1,6 @@
 package com.company;
 
-import java.util.ArrayDeque;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class XMLHandler {
     public static XMLRepresentation convertStringToXMLObjects(String content) {
@@ -55,15 +53,91 @@ public class XMLHandler {
         return sb.toString();
     }
 
-    public static Set<String> findDuplicatingIds(XMLRepresentation xmlRepresentation){
-        for(int i=0; i< xmlRepresentation.getListOfElements().size(); i++){
-
-        }
-
+    public static void setUnDublicatingIdsToElements(XMLRepresentation xmlRepresentation){
+        Set<String> duplicatedElements = new HashSet<>();
+        Set<String> allIds = new HashSet<>();
+        findDuplicatingIds(xmlRepresentation, duplicatedElements, allIds);
+        setIdsOfElementsInRepresentation(duplicatedElements, xmlRepresentation, allIds);
     }
 
-    public static void findDuplicatingIdsInChildElements(XMLElement xmlElement){
+    public static void findDuplicatingIds(XMLRepresentation xmlRepresentation, Set<String> duplicatedElements, Set<String> allElements){
+        for(int i=0; i< xmlRepresentation.getListOfElements().size(); i++){
+            XMLHandler.findDuplicatingIdsInChildElements(xmlRepresentation.getListOfElements().get(i), duplicatedElements, allElements);
+        }
+    }
 
+    public static void findDuplicatingIdsInChildElements(XMLElement xmlElement, Set<String> duplicatedElements, Set<String> allElements) {
+
+        if (xmlElement.getAttributes() != null) {
+            if (xmlElement.getAttributes().containsKey("id")) {
+
+                    String value = xmlElement.getAttributes().get("id");
+                    String realValue = value.split("_")[0];
+                    if(!allElements.add(realValue)) {
+                        duplicatedElements.add(realValue);
+                    }
+
+
+
+            }
+
+        }
+        for(int i=0 ; i<xmlElement.getChildren().size(); i++){
+            XMLHandler.findDuplicatingIdsInChildElements(xmlElement.getChildren().get(i), duplicatedElements, allElements);
+        }
+    }
+
+    public static void setIdsOfElementsInRepresentation(Set<String> duplicatedElements, XMLRepresentation xmlRepresentation, Set<String> allIds){
+        Map<String, String> duplicatedElementsCounter = new HashMap<>();
+        for(int i=0; i< xmlRepresentation.getListOfElements().size(); i++){
+            XMLHandler.setIdsOfElements(duplicatedElements, allIds, xmlRepresentation.getListOfElements().get(i), duplicatedElementsCounter);
+        }
+    }
+
+    public static void setIdsOfElements(Set<String> duplicatedElements, Set<String> allIds, XMLElement xmlElement, Map<String, String> duplicatedElementsCounter){
+        if(xmlElement.getAttributes()!=null){
+        Map<String, String> map = xmlElement.getAttributes();
+            if(!map.containsKey("id")){
+                XMLHandler.setUntakenID(map, allIds, xmlElement);
+            }
+            else{
+            String wholeId = map.get("id");
+            String id = wholeId.split("_")[0];
+            if(duplicatedElements.contains(id)){
+                if(duplicatedElementsCounter.containsKey(id)){
+                    String current = duplicatedElementsCounter.get(id);
+                    int currentInt = Integer.parseInt(current);
+                    currentInt++;
+                    duplicatedElementsCounter.put(id, String.valueOf(currentInt));
+                }
+                else{
+                    duplicatedElementsCounter.put(id,"1");
+                }
+                String newId = id + "_" + duplicatedElementsCounter.get(id);
+                map.put("id", newId);
+            }
+            }
+
+        }
+        else{
+            Map<String,String> map = new HashMap<>();
+        XMLHandler.setUntakenID(map, allIds, xmlElement);
+        }
+        for(int i=0 ; i<xmlElement.getChildren().size(); i++){
+            XMLHandler.setIdsOfElements(duplicatedElements, allIds, xmlElement.getChildren().get(i), duplicatedElementsCounter);
+        }
+    }
+
+    private static void setUntakenID(Map<String,String> map, Set<String> allIds, XMLElement xmlElement){
+        String id = "1";
+        while(allIds.contains(id)){
+            int idAsNumber = Integer.parseInt(id);
+            idAsNumber++;
+            id = String.valueOf(idAsNumber);
+        }
+        map.put("id", id);
+        xmlElement.setAttributes(map);
+        allIds.add(id);
     }
 
 
