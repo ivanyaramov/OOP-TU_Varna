@@ -1,5 +1,8 @@
 package com.company;
 
+import com.company.exceptions.AttributeNotFoundException;
+import com.company.exceptions.IdNotFoundException;
+
 import java.util.*;
 
 public class XMLHandler {
@@ -138,6 +141,44 @@ public class XMLHandler {
         map.put("id", id);
         xmlElement.setAttributes(map);
         allIds.add(id);
+    }
+
+    public static void setAttributeValueById(String id, String key, String value, XMLRepresentation xmlRepresentation) throws IdNotFoundException {
+        XMLElement element = XMLHandler.findElementById(id, xmlRepresentation);
+            element.getAttributes().put(key, value);
+
+
+    }
+
+    public static String getAttributeValueByElementId(String id, String key, XMLRepresentation xmlRepresentation) throws IdNotFoundException, AttributeNotFoundException {
+    XMLElement element = XMLHandler.findElementById(id, xmlRepresentation);
+    if(!element.getAttributes().containsKey(key)){
+        throw new AttributeNotFoundException("There was no attribute with key " + key);
+    }
+    return element.getAttributes().get(key);
+    }
+
+    public static XMLElement findElementById(String id, XMLRepresentation xmlRepresentation) throws IdNotFoundException {
+       for(XMLElement el: xmlRepresentation.getListOfElements()){
+           XMLElement newEl = XMLHandler.findElementByIdInElement(el, id);
+           if(newEl!=null){
+               return newEl;
+           }
+       }
+       throw new IdNotFoundException("There is no element with id " + id);
+    }
+
+    public static XMLElement findElementByIdInElement(XMLElement xmlElement, String id){
+        if(xmlElement.getAttributes().get("id").equals(id)){
+            return xmlElement;
+        }
+      for(XMLElement el : xmlElement.getChildren()){
+          XMLElement newEl = XMLHandler.findElementByIdInElement(el, id);
+          if(newEl!=null){
+              return newEl;
+          }
+      }
+      return null;
     }
 
 
