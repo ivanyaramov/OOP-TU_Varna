@@ -1,6 +1,7 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +15,12 @@ public class XMLElement {
 
     public XMLElement(Map<String, String> attributes, String name) {
         this.attributes = attributes;
+        this.name = name;
+        this.children = new ArrayList<>();
+    }
+
+    public XMLElement(String name) {
+        this.attributes = new HashMap<>();
         this.name = name;
         this.children = new ArrayList<>();
     }

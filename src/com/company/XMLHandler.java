@@ -1,6 +1,8 @@
 package com.company;
 
 import com.company.exceptions.AttributeNotFoundException;
+import com.company.exceptions.CannotAddChildException;
+import com.company.exceptions.ChildNotFoundException;
 import com.company.exceptions.IdNotFoundException;
 
 import java.util.*;
@@ -180,6 +182,64 @@ public class XMLHandler {
       }
       return null;
     }
+
+    public static String getAttributesOfChildren(String id, XMLRepresentation xmlRepresentation) throws IdNotFoundException {
+        StringBuilder sb = new StringBuilder();
+        XMLElement element = XMLHandler.findElementById(id, xmlRepresentation);
+        if(element.getChildren().size()!=0){
+            for(XMLElement current: element.getChildren()){
+                XMLHandler.getAttributesOfChildrenAndCurrent(current, sb);
+            }
+        }
+        return sb.toString();
+    }
+
+    public static void getAttributesOfChildrenAndCurrent(XMLElement element, StringBuilder sb){
+        if(element.getAttributes() != null){
+            StringHandler.addAttributesOfElementToStringBuilder(element.getAttributes(), sb);
+        }
+        if(element.getChildren().size()!=0){
+            for(XMLElement current: element.getChildren()){
+                XMLHandler.getAttributesOfChildrenAndCurrent(current, sb);
+            }
+        }
+    }
+
+    public static String getNthChildOfElement(String id, int n, XMLRepresentation xmlRepresentation) throws IdNotFoundException, ChildNotFoundException {
+        XMLElement xmlElement = XMLHandler.findElementById(id, xmlRepresentation);
+        if(xmlElement.getChildren().size()<n-1){
+            throw new ChildNotFoundException("There is no child " + n + " in the element with id " + id);
+        }
+        StringBuilder sb = new StringBuilder();
+       StringHandler.addElementsToStringBuilder(xmlElement.getChildren().get(n-1), sb, 0);
+        return sb.toString();
+    }
+
+    public static String getTextOfElement(String id, XMLRepresentation xmlRepresentation) throws IdNotFoundException {
+        XMLElement xmlElement = XMLHandler.findElementById(id, xmlRepresentation);
+        StringBuilder sb = new StringBuilder();
+        StringHandler.addElementsToStringBuilder(xmlElement, sb, 0);
+        return sb.toString();
+    }
+
+    public static void deleteElementAttributeByKey(String id, String key, XMLRepresentation xmlRepresentation) throws IdNotFoundException {
+        XMLElement xmlElement = XMLHandler.findElementById(id, xmlRepresentation);
+        if(xmlElement.getAttributes()!=null){
+            xmlElement.getAttributes().remove(key);
+        }
+    }
+
+    public static void addElementToElement(String id, String name, XMLRepresentation xmlRepresentation) throws IdNotFoundException, CannotAddChildException {
+        XMLElement xmlElement = XMLHandler.findElementById(id, xmlRepresentation);
+        if(xmlElement.getValue()!=null){
+            throw new CannotAddChildException("You can not add child to this element! It has a value.");
+        }
+        XMLElement newElement = new XMLElement(name);
+        xmlElement.getChildren().add(newElement);
+        XMLHandler.setUnDublicatingIdsToElements(xmlRepresentation);
+    }
+
+
 
 
 }

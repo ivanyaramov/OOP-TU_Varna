@@ -116,7 +116,7 @@ public class StringHandler {
         sb.append(">");
         if(xmlElement.getValue()!= null){
             sb.append(xmlElement.getValue());
-            StringHandler.addClosingTagToStribgBuilder(sb, xmlElement.getName());
+            StringHandler.addClosingTagToStringBuilder(sb, xmlElement.getName());
         }
         else{
             sb.append(System.lineSeparator());
@@ -124,7 +124,7 @@ public class StringHandler {
                 StringHandler.addElementsToStringBuilder(xmlElement.getChildren().get(i), sb, level + 1);
             }
             StringHandler.addSpaces(level, sb);
-            StringHandler.addClosingTagToStribgBuilder(sb, xmlElement.getName());
+            StringHandler.addClosingTagToStringBuilder(sb, xmlElement.getName());
         }
 
     }
@@ -145,11 +145,18 @@ public class StringHandler {
         }
     }
 
-    private static void addClosingTagToStribgBuilder(StringBuilder sb, String name){
+    private static void addClosingTagToStringBuilder(StringBuilder sb, String name){
         sb.append("</");
         sb.append(name);
         sb.append(">");
         sb.append(System.lineSeparator());
+    }
+
+    public static void addAttributesOfElementToStringBuilder(Map<String, String> map, StringBuilder sb){
+        for (Map.Entry<String, String> stringStringEntry : map.entrySet()) {
+            sb.append(String.format("%s = %s%n",stringStringEntry.getKey(), stringStringEntry.getValue()));
+        }
+
     }
 
 }
