@@ -1,9 +1,6 @@
 package com.company;
 
-import com.company.exceptions.AttributeNotFoundException;
-import com.company.exceptions.CannotAddChildException;
-import com.company.exceptions.ChildNotFoundException;
-import com.company.exceptions.IdNotFoundException;
+import com.company.exceptions.*;
 
 import java.util.*;
 
@@ -183,6 +180,23 @@ public class XMLHandler {
       return null;
     }
 
+    public static void findElementsByNameInElement(String parentName, String expectedParentName, XMLElement xmlElement, String name, List<XMLElement> list){
+    if(xmlElement.getName().equals(name) && parentName.equals(expectedParentName)){
+        list.add(xmlElement);
+    }
+    for(XMLElement current: xmlElement.getChildren()){
+        XMLHandler.findElementsByNameInElement(xmlElement.getName(), expectedParentName, current, name, list);
+    }
+    }
+
+    public static List<XMLElement> findElementsByName(String expectedParentName, String name, XMLRepresentation xmlRepresentation){
+       List<XMLElement> list = new ArrayList<>();
+        for(XMLElement el: xmlRepresentation.getListOfElements()){
+        XMLHandler.findElementsByNameInElement("",expectedParentName, el, name, list);
+        }
+        return list;
+    }
+
     public static String getAttributesOfChildren(String id, XMLRepresentation xmlRepresentation) throws IdNotFoundException {
         StringBuilder sb = new StringBuilder();
         XMLElement element = XMLHandler.findElementById(id, xmlRepresentation);
@@ -238,6 +252,20 @@ public class XMLHandler {
         xmlElement.getChildren().add(newElement);
         XMLHandler.setUnDublicatingIdsToElements(xmlRepresentation);
     }
+
+    public static List<XMLElement> xPathElementList(String elementName, String expectedParentName, XMLRepresentation xmlRepresentation){
+        return XMLHandler.findElementsByName(expectedParentName, elementName, xmlRepresentation);
+    }
+
+    public static XMLElement xPathElement(String expectedParentName, String elementName, XMLRepresentation xmlRepresentation, int number ) throws ElementNotFoundException {
+        List<XMLElement> list = XMLHandler.findElementsByName(expectedParentName, elementName, xmlRepresentation);
+        if(number>list.size()-1){
+            throw new ElementNotFoundException("There was no element " + number + " of this type ");
+        }
+        return list.get(number);
+    }
+
+
 
 
 
