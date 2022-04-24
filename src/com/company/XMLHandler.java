@@ -181,9 +181,14 @@ public class XMLHandler {
     }
 
     public static void findElementsByNameInElement(String parentName, String expectedParentName, XMLElement xmlElement, String name, List<XMLElement> list){
-    if(xmlElement.getName().equals(name) && parentName.equals(expectedParentName)){
-        list.add(xmlElement);
-    }
+        if(expectedParentName != null) {
+            if (xmlElement.getName().equals(name) && parentName.equals(expectedParentName)) {
+                list.add(xmlElement);
+            }
+        }
+        else if(xmlElement.getName().equals(name)){
+            list.add(xmlElement);
+        }
     for(XMLElement current: xmlElement.getChildren()){
         XMLHandler.findElementsByNameInElement(xmlElement.getName(), expectedParentName, current, name, list);
     }
@@ -196,6 +201,31 @@ public class XMLHandler {
         }
         return list;
     }
+
+    public static List<XMLElement> findElementsByChildrenValue(String parentName, String childName, String value, XMLRepresentation xmlRepresentation){
+        List<XMLElement> list = new ArrayList<>();
+        for(XMLElement el: xmlRepresentation.getListOfElements()){
+            XMLHandler.findElementsByChildrenValueInElements(parentName,childName, value, list, el);
+        }
+        return list;
+    }
+
+    public static void findElementsByChildrenValueInElements(String parentName, String childName, String value, List<XMLElement> list,  XMLElement xmlElement){
+        if(xmlElement.getName().equals(parentName)){
+            for(XMLElement current: xmlElement.getChildren()){
+                if(current.getName().equals(childName) && current.getValue().equals(value)){
+                    list.add(xmlElement);
+                    return;
+                }
+            }
+        }
+
+        for(XMLElement current: xmlElement.getChildren()){
+            XMLHandler.findElementsByChildrenValueInElements(parentName, childName, value, list, current);
+        }
+    }
+
+
 
     public static String getAttributesOfChildren(String id, XMLRepresentation xmlRepresentation) throws IdNotFoundException {
         StringBuilder sb = new StringBuilder();
@@ -263,6 +293,26 @@ public class XMLHandler {
             throw new ElementNotFoundException("There was no element " + number + " of this type ");
         }
         return list.get(number);
+    }
+
+    public static List<String> xPathGetAllIdsOfElement(String elementName, XMLRepresentation xmlRepresentation) throws ElementNotFoundException {
+       List<XMLElement> xmlElements =  XMLHandler.findElementsByName(null, elementName, xmlRepresentation);
+       List<String> listOfIds = new ArrayList<>();
+       for(XMLElement xmlElement : xmlElements){
+           listOfIds.add(xmlElement.getAttributes().get("id"));
+       }
+       if(listOfIds.size() == 0){
+           throw new ElementNotFoundException("No elements with name " + elementName + " were found");
+       }
+       return listOfIds;
+    }
+
+    public static List<XMLElement> xPathFindElementsByNameAndValueOfChild(String elementName, String parentName, String value, XMLRepresentation xmlRepresentation) throws ElementNotFoundException {
+        List<XMLElement> list = XMLHandler.findElementsByChildrenValue(parentName, elementName, value, xmlRepresentation);
+        if(list.size() == 0){
+            throw new ElementNotFoundException("No elements with such children values were found");
+        }
+        return list;
     }
 
 
