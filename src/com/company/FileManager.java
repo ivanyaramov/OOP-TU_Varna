@@ -7,14 +7,16 @@ import java.io.*;
 public class FileManager {
     private File file;
     private String path;
+    private XMLRepresentation xmlRepresentation;
 
-    public void openFile(String path) throws IOException {
+    public void openFile(String path) throws IOException, FileNotOpenedException {
     File file = new File(path);
     if(!file.exists()){
         file.createNewFile();
     }
     this.path = path;
     this.file = file;
+    xmlRepresentation = XMLHandler.convertStringToXMLObjects(readFile());
     }
 
     public boolean isFileOpened(){
@@ -47,8 +49,10 @@ public class FileManager {
                 while ((line = br.readLine()) != null) {
                     resultStringBuilder.append(line).append("\n");
                 }
-
-            return resultStringBuilder.toString();
+                String toReturn = resultStringBuilder.toString();
+            toReturn = toReturn.replace("\n", "");
+            toReturn = toReturn.replace("  ", "");
+            return toReturn;
         }
         else{
             throw new FileNotOpenedException("File  must be opened before reading");
@@ -59,5 +63,7 @@ public class FileManager {
         return path;
     }
 
-
+    public XMLRepresentation getXmlRepresentation() {
+        return xmlRepresentation;
+    }
 }
