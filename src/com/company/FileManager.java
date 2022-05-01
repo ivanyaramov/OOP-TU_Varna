@@ -10,13 +10,14 @@ public class FileManager {
     private XMLRepresentation xmlRepresentation;
 
     public void openFile(String path) throws IOException, FileNotOpenedException {
-    File file = new File(path);
-    if(!file.exists()){
-        file.createNewFile();
-    }
-    this.path = path;
-    this.file = file;
-    xmlRepresentation = XMLHandler.convertStringToXMLObjects(readFile());
+        File file = new File(path);
+        if(!file.exists()){
+            file.createNewFile();
+        }
+        this.path = path;
+        this.file = file;
+        xmlRepresentation = XMLHandler.convertStringToXMLObjects(readFile());
+        XMLHandler.setUnDublicatingIdsToElements(xmlRepresentation);
     }
 
     public boolean isFileOpened(){
@@ -31,7 +32,7 @@ public class FileManager {
     }
 
     public void saveFile(String content) throws IOException {
-       saveFileAs(content, this.path);
+        saveFileAs(content, this.path);
     }
 
     public void saveFileAs(String content, String path) throws IOException {
@@ -45,11 +46,11 @@ public class FileManager {
             StringBuilder resultStringBuilder = new StringBuilder();
             InputStream inputStream = new FileInputStream(file);
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
-                String line;
-                while ((line = br.readLine()) != null) {
-                    resultStringBuilder.append(line).append("\n");
-                }
-                String toReturn = resultStringBuilder.toString();
+            String line;
+            while ((line = br.readLine()) != null) {
+                resultStringBuilder.append(line).append("\n");
+            }
+            String toReturn = resultStringBuilder.toString();
             toReturn = toReturn.replace("\n", "");
             toReturn = toReturn.replace("  ", "");
             return toReturn;

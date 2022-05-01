@@ -1,0 +1,15 @@
+<people id="10_1" bid="88">
+    <person id="10_2">
+        <name id="1">
+            <ads id="0_1" boms="123"/>
+        </name>
+        <address id="2">USA</address>
+    </person>
+    <person id="7">
+        <address id="3">USA</address>
+        <name id="4">Ivan Petrov</name>
+        <address id="5">Bulgaria</address>
+    </person>
+</people>
+<person id="6">banov</person>
+<gosho bam="5" id="8"/>

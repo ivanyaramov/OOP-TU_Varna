@@ -37,7 +37,7 @@ public class StringHandler {
     }
 
     public static String trimTagName(String content) {
-       String saveHere = StringHandler.trimXMLChars(content);
+        String saveHere = StringHandler.trimXMLChars(content);
         String[] splitContent = saveHere.split(" ");
         saveHere = splitContent[0];
         return saveHere;
@@ -144,7 +144,7 @@ public class StringHandler {
 
     private static void addSpaces(int level, StringBuilder sb){
         for(int i=0; i<level; i++){
-            sb.append("   ");
+            sb.append("    ");
         }
     }
 
@@ -160,6 +160,28 @@ public class StringHandler {
             sb.append(String.format("%s = %s%n",stringStringEntry.getKey(), stringStringEntry.getValue()));
         }
 
+    }
+
+    public static void printELementList(List<XMLElement> list){
+        for(XMLElement el: list){
+            StringBuilder sb = new StringBuilder();
+            StringHandler.addElementsToStringBuilder(el, sb, 0);
+            System.out.println(sb);
+            System.out.println();
+        }
+    }
+
+    public static void printStringList(List<String> list){
+        for(String current: list){
+            System.out.println("id=" + current);
+        }
+    }
+
+    public static void printSingleElement(XMLElement element){
+        StringBuilder sb = new StringBuilder();
+        StringHandler.addElementsToStringBuilder(element, sb, 0);
+        System.out.println(sb);
+        System.out.println();
     }
 
 
