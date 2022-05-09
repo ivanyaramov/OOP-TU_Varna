@@ -1,0 +1,108 @@
+<catalog id="1">
+    <book id="bk101">
+        <author id="2">Gambardella, Matthew</author>
+        <title id="3">XML Developer's Guide</title>
+        <genre id="4">Computer</genre>
+        <price id="5">44.95</price>
+        <publish_date id="6">2000-10-01</publish_date>
+        <description id="7">An in-depth look at creating applicationswith XML.</description>
+    </book>
+    <book id="bk102">
+        <author id="8">Ralls, Kim</author>
+        <title id="9">Midnight Rain</title>
+        <genre id="10">Fantasy</genre>
+        <price id="11">5.95</price>
+        <publish_date id="12">2000-12-16</publish_date>
+        <description id="13">A former architect battles corporate zombies,an evil sorceress, and her own childhood to become queenof the world.</description>
+    </book>
+    <book id="bk103">
+        <author id="14">Corets, Eva</author>
+        <title id="15">Maeve Ascendant</title>
+        <genre id="16">Fantasy</genre>
+        <price id="17">5.95</price>
+        <publish_date id="18">2000-11-17</publish_date>
+        <description id="19">After the collapse of a nanotechnologysociety in England, the young survivors lay thefoundation for a new society.</description>
+    </book>
+    <book id="bk104">
+        <author id="20">Corets, Eva</author>
+        <title id="21">Oberon's Legacy</title>
+        <genre id="22">Fantasy</genre>
+        <price id="23">5.95</price>
+        <publish_date id="24">2001-03-10</publish_date>
+        <description id="25">In post-apocalypse England, the mysteriousagent known only as Oberon helps to create a new lifefor the inhabitants of London. Sequel to MaeveAscendant.</description>
+    </book>
+    <book id="bk105">
+        <author id="26">Corets, Eva</author>
+        <title id="27">The Sundered Grail</title>
+        <genre id="28">Fantasy</genre>
+        <price id="29">5.95</price>
+        <publish_date id="30">2001-09-10</publish_date>
+        <description id="31">The two daughters of Maeve, half-sisters,battle one another for control of England. Sequel toOberon's Legacy.</description>
+    </book>
+    <book id="bk106">
+        <author id="32">Randall, Cynthia</author>
+        <title id="33">Lover Birds</title>
+        <genre id="34">Romance</genre>
+        <price id="35">4.95</price>
+        <publish_date id="36">2000-09-02</publish_date>
+        <description id="37">When Carla meets Paul at an ornithologyconference, tempers fly as feathers get ruffled.</description>
+    </book>
+    <book id="bk107">
+        <author id="38">Thurman, Paula</author>
+        <title id="39">Splish Splash</title>
+        <genre id="40">Romance</genre>
+        <price id="41">4.95</price>
+        <publish_date id="42">2000-11-02</publish_date>
+        <description id="43">A deep sea diver finds true love twentythousand leagues beneath the sea.</description>
+    </book>
+    <book id="bk108">
+        <author id="44">Knorr, Stefan</author>
+        <title id="45">Creepy Crawlies</title>
+        <genre id="46">Horror</genre>
+        <price id="47">4.95</price>
+        <publish_date id="48">2000-12-06</publish_date>
+        <description id="49">An anthology of horror stories about roaches,centipedes, scorpionsand other insects.</description>
+    </book>
+    <book id="bk109">
+        <author id="50">Kress, Peter</author>
+        <title id="51">Paradox Lost</title>
+        <genre id="52">Science Fiction</genre>
+        <price id="53">6.95</price>
+        <publish_date id="54">2000-11-02</publish_date>
+        <description id="55">After an inadvertant trip through a HeisenbergUncertainty Device, James Salway discovers the problemsof being quantum.</description>
+    </book>
+    <book id="bk110">
+        <author id="56">O'Brien, Tim</author>
+        <title id="57">Microsoft .NET: The Programming Bible</title>
+        <genre id="58">Computer</genre>
+        <price id="59">36.95</price>
+        <publish_date id="60">2000-12-09</publish_date>
+        <description id="61">Microsoft's .NET initiative is explored indetail in this deep programmer's reference.</description>
+    </book>
+    <book id="bk111_1">
+        <author id="62">O'Brien, Tim</author>
+        <title id="63">MSXML3: A Comprehensive Guide</title>
+        <genre id="64">Computer</genre>
+        <price id="65">36.95</price>
+        <publish_date id="66">2000-12-01</publish_date>
+        <description id="67">The Microsoft MSXML3 parser is covered indetail, with attention to XML DOM interfaces, XSLT processing,SAX and more.</description>
+    </book>
+    <book id="bk112">
+        <author id="68">Galos, Mike</author>
+        <title id="69">Visual Studio 7: A Comprehensive Guide</title>
+        <genre id="70">Computer</genre>
+        <price id="71">49.95</price>
+        <publish_date id="72">2001-04-16</publish_date>
+        <description id="73">Microsoft Visual Studio 7 is explored in depth,looking at how Visual Basic, Visual C++, C#, and ASP+ areintegrated into a comprehensive developmentenvironment.</description>
+    </book>
+</catalog>
+<catalog id="74">
+    <book id="bk111_2">
+        <author id="75">Twen</author>
+        <title id="76">Gulliver</title>
+        <genre id="77">Adventure</genre>
+        <price id="78">36.96</price>
+        <publish_date id="79">2000-02-01</publish_date>
+        <description id="80">An adventurer travelling around.</description>
+    </book>
+</catalog>

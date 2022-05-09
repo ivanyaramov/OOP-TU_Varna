@@ -4,14 +4,20 @@ import com.company.exceptions.FileNotOpenedException;
 
 import java.io.*;
 
+//клас, който се използва за работа със файлове
 public class FileManager {
+    //текущия отворен файл
     private File file;
+    //целия път към текущия файл
     private String path;
+    //репрезентацията на текущия файл под формата на java обекти
     private XMLRepresentation xmlRepresentation;
 
+    //отваряне на файл и ако не съществува се създава такъв
+    //след като се отвори съдържанието му се парсира под формата на обекти
     public void openFile(String path) throws IOException, FileNotOpenedException {
         File file = new File(path);
-        if(!file.exists()){
+        if (!file.exists()) {
             file.createNewFile();
         }
         this.path = path;
@@ -20,29 +26,34 @@ public class FileManager {
         XMLHandler.setUnDublicatingIdsToElements(xmlRepresentation);
     }
 
-    public boolean isFileOpened(){
-        if(this.file == null){
+    //проверява дали вече няма отворен файл
+    public boolean isFileOpened() {
+        if (this.file == null) {
             return false;
         }
         return true;
     }
 
-    public void closeFile(){
+    //затвяря файла
+    public void closeFile() {
         this.file = null;
     }
 
+    //записва съдържанието в отворения файл
     public void saveFile(String content) throws IOException {
         saveFileAs(content, this.path);
     }
 
+    //записва съдържанието в подаден файл
     public void saveFileAs(String content, String path) throws IOException {
         FileWriter myWriter = new FileWriter(path);
         myWriter.write(content);
         myWriter.close();
     }
 
+    //чете съдържанието на файла и връща текст
     public String readFile() throws FileNotOpenedException, IOException {
-        if(isFileOpened()){
+        if (isFileOpened()) {
             StringBuilder resultStringBuilder = new StringBuilder();
             InputStream inputStream = new FileInputStream(file);
             BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));
@@ -54,8 +65,7 @@ public class FileManager {
             toReturn = toReturn.replace("\n", "");
             toReturn = toReturn.replace("  ", "");
             return toReturn;
-        }
-        else{
+        } else {
             throw new FileNotOpenedException("File  must be opened before reading");
         }
     }

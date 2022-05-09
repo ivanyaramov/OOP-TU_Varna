@@ -6,13 +6,16 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
+//клас, който обработва подадените конзолни програми
 public class CommandHandler {
+    //инстанция на обекта, който работи с файлове
     private FileManager fileManager;
 
     public CommandHandler() {
         this.fileManager = new FileManager();
     }
 
+    //метод който приема командите със switch-case, валидира ги в заивисмост от командата и вика конкретните методи за манипулация
     public void manageCommands()
             throws IOException, FileNotClosedException, FileNotOpenedException, AttributeNotFoundException,
             IdNotFoundException, ChildNotFoundException, CannotAddChildException, ElementNotFoundException {
@@ -40,14 +43,14 @@ public class CommandHandler {
                     }
                     break;
                 case "close":
-                    if(!checkIsFileOpened(isFileOpened)){
+                    if (!checkIsFileOpened(isFileOpened)) {
                         break;
                     }
                     close();
                     isFileOpened = false;
                     break;
                 case "save":
-                    if(!checkIsFileOpened(isFileOpened)){
+                    if (!checkIsFileOpened(isFileOpened)) {
                         break;
                     }
                     save();
@@ -56,7 +59,7 @@ public class CommandHandler {
                     help();
                     break;
                 case "saveas":
-                    if(!checkIsFileOpened(isFileOpened)){
+                    if (!checkIsFileOpened(isFileOpened)) {
                         break;
                     }
                     if (length != 2) {
@@ -68,10 +71,10 @@ public class CommandHandler {
                     break;
                 case "exit":
                     toBreak = true;
-                    System.out.println("Exitting the program");
+                    exit();
                     break;
                 case "print":
-                    if(!checkIsFileOpened(isFileOpened)){
+                    if (!checkIsFileOpened(isFileOpened)) {
                         break;
                     }
                     System.out.println();
@@ -79,7 +82,7 @@ public class CommandHandler {
                     System.out.println();
                     break;
                 case "select":
-                    if(!checkIsFileOpened(isFileOpened)){
+                    if (!checkIsFileOpened(isFileOpened)) {
                         break;
                     }
                     if (length != 3) {
@@ -96,12 +99,12 @@ public class CommandHandler {
                         illegalComand();
                         break;
                     }
-                    XMLHandler.setAttributeValueById(splittedCommand[1], splittedCommand[2],splittedCommand[3], fileManager.getXmlRepresentation());
+                    XMLHandler.setAttributeValueById(splittedCommand[1], splittedCommand[2], splittedCommand[3], fileManager.getXmlRepresentation());
                     System.out.println("The element attribute was set successfully!");
                     System.out.println();
                     break;
                 case "children":
-                    if(!checkIsFileOpened(isFileOpened)){
+                    if (!checkIsFileOpened(isFileOpened)) {
                         break;
                     }
                     if (length != 2) {
@@ -112,7 +115,7 @@ public class CommandHandler {
                     System.out.println();
                     break;
                 case "child":
-                    if(!checkIsFileOpened(isFileOpened)){
+                    if (!checkIsFileOpened(isFileOpened)) {
                         break;
                     }
                     if (length != 3) {
@@ -123,7 +126,7 @@ public class CommandHandler {
                     System.out.println();
                     break;
                 case "text":
-                    if(!checkIsFileOpened(isFileOpened)){
+                    if (!checkIsFileOpened(isFileOpened)) {
                         break;
                     }
                     if (length != 2) {
@@ -134,7 +137,7 @@ public class CommandHandler {
                     System.out.println();
                     break;
                 case "delete":
-                    if(!checkIsFileOpened(isFileOpened)){
+                    if (!checkIsFileOpened(isFileOpened)) {
                         break;
                     }
                     if (length != 3) {
@@ -146,7 +149,7 @@ public class CommandHandler {
                     System.out.println();
                     break;
                 case "newchild":
-                    if(!checkIsFileOpened(isFileOpened)){
+                    if (!checkIsFileOpened(isFileOpened)) {
                         break;
                     }
                     if (length != 3) {
@@ -158,7 +161,7 @@ public class CommandHandler {
                     System.out.println();
                     break;
                 case "xpath":
-                    if(!checkIsFileOpened(isFileOpened)){
+                    if (!checkIsFileOpened(isFileOpened)) {
                         break;
                     }
                     if (length != 2) {
@@ -175,6 +178,7 @@ public class CommandHandler {
         }
     }
 
+    //отваряне на файл ако друг не е вече отворен
     private void open(String path) throws IOException, FileNotClosedException, FileNotOpenedException {
         if (!fileManager.isFileOpened()) {
             fileManager.openFile(path);
@@ -184,6 +188,7 @@ public class CommandHandler {
         }
     }
 
+    //затваряне на файл ако има отворен такъв
     private void close() throws FileNotOpenedException {
         if (fileManager.isFileOpened()) {
             String path = fileManager.getPath();
@@ -194,6 +199,7 @@ public class CommandHandler {
         }
     }
 
+    //записване в текущия файл
     private void save() throws IOException, FileNotOpenedException {
         if (fileManager.isFileOpened()) {
             fileManager.saveFile(XMLHandler.convertXMLObjectsToString(fileManager.getXmlRepresentation()));
@@ -203,6 +209,7 @@ public class CommandHandler {
         }
     }
 
+    //записване в указан файл
     private void saveAs(String path) throws IOException, FileNotOpenedException {
         if (fileManager.isFileOpened()) {
             fileManager.saveFileAs(XMLHandler.convertXMLObjectsToString(fileManager.getXmlRepresentation()), path);
@@ -212,6 +219,7 @@ public class CommandHandler {
         }
     }
 
+    //меню
     private void help() {
         System.out.println("The following commands are supported:");
         System.out.println("open <file> opens <file>");
@@ -234,67 +242,70 @@ public class CommandHandler {
         System.out.println("xpath <nameOfParent>(<nameOfChildChecking>=<value>/<nameOfChildToOutput>  prints all children of an element with the given name where a child value corresponds to the given");
     }
 
+    //излизане от програмата
     private void exit() {
         System.out.println("Exiting the program...");
     }
 
+    //метод който указва, че подадената команда е грешна
     private void illegalComand() {
         System.out.println("The command you entered is illegal");
         System.out.println();
         help();
     }
 
+    //в случай че подадената команда е xpath, се вика този метод, понеже логиката му е малко по-сложна.
+    //валидира подадената команда в зависимост от коя xpath команда е извикана
     private void xPathHandler(String command) throws ElementNotFoundException {
         String[] splittedXPath = command.split("/");
-        if(splittedXPath.length == 1){
+        if (splittedXPath.length == 1) {
             String[] elements = splittedXPath[0].split("\\(@");
-            if(elements.length !=2){
+            if (elements.length != 2) {
                 illegalComand();
                 return;
             }
             String parent = elements[0];
             String id = elements[1].substring(0, elements.length);
-            if(!id.equals("id")){
+            if (!id.equals("id")) {
                 illegalComand();
                 return;
             }
             List<String> list = XMLHandler.xPathGetAllIdsOfElement(parent, fileManager.getXmlRepresentation());
-            StringHandler.printStringList(list);
-        }
-        else{
+            StringHandler.printIdStringList(list);
+        } else {
             String parent = splittedXPath[0];
             String child = splittedXPath[1];
             String[] checkSplit = parent.split("\\(");
-            if(checkSplit.length == 2){
+            if (checkSplit.length == 2) {
                 String currentParent = checkSplit[0];
                 String command2 = checkSplit[1];
                 String[] commandSplit = command2.split("=");
                 String currentChild = commandSplit[0];
-                String value = commandSplit[1].substring(0, commandSplit[1].length()-1);
+                String value = commandSplit[1].substring(0, commandSplit[1].length() - 1);
                 List<XMLElement> list = XMLHandler.xPathFindElementsByNameAndValueOfChild(currentChild, currentParent, value, child, fileManager.getXmlRepresentation());
-                StringHandler.printELementList(list);
+                StringHandler.printElementList(list);
                 return;
             }
             String[] checkSplit2 = child.split("\\[");
-            if(checkSplit2.length == 1){
+            if (checkSplit2.length == 1) {
                 List<XMLElement> list = XMLHandler.xPathElementList(child, parent, fileManager.getXmlRepresentation());
-                if(list.size() == 0){
+                if (list.size() == 0) {
                     throw new ElementNotFoundException("The are no elements of this type!");
                 }
-                StringHandler.printELementList(list);
+                StringHandler.printElementList(list);
                 return;
-            }
-            else{
+            } else {
                 String realChild = checkSplit2[0];
-                String index = checkSplit2[1].substring(0, checkSplit2.length-1);
+                String index = checkSplit2[1].substring(0, checkSplit2.length - 1);
                 XMLElement element = XMLHandler.xPathElement(parent, realChild, fileManager.getXmlRepresentation(), Integer.parseInt(index));
                 StringHandler.printSingleElement(element);
             }
         }
     }
 
-    private boolean checkIsFileOpened(boolean isFileOpened){
-        if(!isFileOpened){
+    //проверява дали вече друг файл не е бил отворен
+    private boolean checkIsFileOpened(boolean isFileOpened) {
+        if (!isFileOpened) {
             System.out.println("Please first open a file");
             return false;
         }

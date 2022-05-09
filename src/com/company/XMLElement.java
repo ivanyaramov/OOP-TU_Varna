@@ -5,12 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+//репрезентация на един елемент от файла - целта е цялата структура да е от вложени обекти, както е във файла
 public class XMLElement {
+    //репрезентация на xml атрибутите за елемента, под формата ключ - стойност
     private Map<String, String> attributes;
+    //стойност на елемента, ако има такава
     private String value;
+    //име на елемента
     private String name;
+    //вложени деца на елемента
     private List<XMLElement> children;
-
 
 
     public XMLElement(Map<String, String> attributes, String name) {
@@ -58,7 +62,7 @@ public class XMLElement {
         this.children = children;
     }
 
-    public void addChild(XMLElement xmlElement){
+    public void addChild(XMLElement xmlElement) {
         children.add(xmlElement);
     }
 }

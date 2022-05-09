@@ -6,12 +6,15 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+//клас, който служи за обработване и манипулиране на текста от файла (спомага за превръщането на xml съдържанието в java обекти)
 public class StringHandler {
+    //връща само името на файла, като отрязва директорията му
     public static String trimFileName(String path) {
         String[] arr = path.split("\\\\");
         return arr[arr.length - 1];
     }
 
+    //връща следващия поред елемент в цялостния xml (startIndexKeeper указва от къде да почне да чете)
     public static String findTag(String content, StartIndexKeeper startIndexKeeper) {
         String saveHere = "";
         int start = -1;
@@ -32,10 +35,12 @@ public class StringHandler {
         return saveHere;
     }
 
+    //проверява дали елементът няма стойност
     public static boolean isTagClosed(String content) {
         return content.charAt(content.length() - 2) == '/';
     }
 
+    //връща само името на елемента, като отрязва безполезните символи
     public static String trimTagName(String content) {
         String saveHere = StringHandler.trimXMLChars(content);
         String[] splitContent = saveHere.split(" ");
@@ -43,6 +48,7 @@ public class StringHandler {
         return saveHere;
     }
 
+    //маха безполезните символи, идващи от файла в зависимост от това тагът от кой тип е
     public static String trimXMLChars(String content) {
         String saveHere = "";
         if (StringHandler.isClosingTag(content)) {
@@ -57,14 +63,17 @@ public class StringHandler {
         return saveHere;
     }
 
+    //проверява дали тагът е затварящ
     public static boolean isClosingTag(String content) {
         return content.charAt(1) == '/';
     }
 
+    //проверява дали в текущия таг следва вложено дете или стойност
     public static boolean followedByNewTag(String content, StartIndexKeeper startIndexKeeper) {
         return content.charAt(startIndexKeeper.getStartIndex()) == '<';
     }
 
+    //връща карта от атрибутите на текущия таг
     public static Map<String, String> getAttributesOfTag(String content) {
         Map<String, String> map = new LinkedHashMap<>();
         content = StringHandler.trimXMLChars(content);
@@ -79,22 +88,24 @@ public class StringHandler {
             map.put(key, value);
 
         }
-        if(map.size()>0) {
+        if (map.size() > 0) {
             return map;
         }
         return null;
     }
 
+    //премахва кавички
     public static String trimQuoteMarks(String content) {
         return content.substring(1, content.length() - 1);
     }
 
-    public static String findTagValue(String content, StartIndexKeeper startIndexKeeper){
+    //връща стойноста на елемента
+    public static String findTagValue(String content, StartIndexKeeper startIndexKeeper) {
         int end = -1;
         int startIndex = startIndexKeeper.getStartIndex();
-        for(int i=startIndex;i< content.length();i++){
+        for (int i = startIndex; i < content.length(); i++) {
             char current = content.charAt(i);
-            if(current == '<'){
+            if (current == '<') {
                 end = i;
                 break;
             }
@@ -103,27 +114,27 @@ public class StringHandler {
         return content.substring(startIndex, end);
     }
 
-    public static void addElementsToStringBuilder(XMLElement xmlElement, StringBuilder sb, int level){
+    //добавя подаден елемент като текст в подадения StringBuilder
+    public static void addElementsToStringBuilder(XMLElement xmlElement, StringBuilder sb, int level) {
         StringHandler.addSpaces(level, sb);
         sb.append("<");
         sb.append(xmlElement.getName());
         boolean hasAttributes = xmlElement.getAttributes() != null;
-        if(hasAttributes){
+        if (hasAttributes) {
             addAttributesToStringBuilder(xmlElement.getAttributes(), sb);
         }
-        if(xmlElement.getValue() == null && xmlElement.getChildren().size() == 0){
+        if (xmlElement.getValue() == null && xmlElement.getChildren().size() == 0) {
             sb.append("/>");
             sb.append(System.lineSeparator());
             return;
         }
         sb.append(">");
-        if(xmlElement.getValue()!= null){
+        if (xmlElement.getValue() != null) {
             sb.append(xmlElement.getValue());
             StringHandler.addClosingTagToStringBuilder(sb, xmlElement.getName());
-        }
-        else{
+        } else {
             sb.append(System.lineSeparator());
-            for(int i=0; i<xmlElement.getChildren().size(); i++){
+            for (int i = 0; i < xmlElement.getChildren().size(); i++) {
                 StringHandler.addElementsToStringBuilder(xmlElement.getChildren().get(i), sb, level + 1);
             }
             StringHandler.addSpaces(level, sb);
@@ -132,7 +143,8 @@ public class StringHandler {
 
     }
 
-    private static void addAttributesToStringBuilder(Map<String, String> map, StringBuilder sb){
+    //добавя атрибути към StringBuilder
+    private static void addAttributesToStringBuilder(Map<String, String> map, StringBuilder sb) {
         for (Map.Entry<String, String> stringStringEntry : map.entrySet()) {
             sb.append(" ");
             sb.append(stringStringEntry.getKey());
@@ -142,28 +154,32 @@ public class StringHandler {
         }
     }
 
-    private static void addSpaces(int level, StringBuilder sb){
-        for(int i=0; i<level; i++){
+    //добавя отстояние от началото на реда за красиво изобразявнае
+    private static void addSpaces(int level, StringBuilder sb) {
+        for (int i = 0; i < level; i++) {
             sb.append("    ");
         }
     }
 
-    private static void addClosingTagToStringBuilder(StringBuilder sb, String name){
+    //добавяне на затварящ таг, като му се подаде името
+    private static void addClosingTagToStringBuilder(StringBuilder sb, String name) {
         sb.append("</");
         sb.append(name);
         sb.append(">");
         sb.append(System.lineSeparator());
     }
 
-    public static void addAttributesOfElementToStringBuilder(Map<String, String> map, StringBuilder sb){
+    //добавяне на атрбитуи към StringBuilder
+    public static void addAttributesOfElementToStringBuilder(Map<String, String> map, StringBuilder sb) {
         for (Map.Entry<String, String> stringStringEntry : map.entrySet()) {
-            sb.append(String.format("%s = %s%n",stringStringEntry.getKey(), stringStringEntry.getValue()));
+            sb.append(String.format("%s = %s%n", stringStringEntry.getKey(), stringStringEntry.getValue()));
         }
 
     }
 
-    public static void printELementList(List<XMLElement> list){
-        for(XMLElement el: list){
+    //принтиране на подаден списък с елементи
+    public static void printElementList(List<XMLElement> list) {
+        for (XMLElement el : list) {
             StringBuilder sb = new StringBuilder();
             StringHandler.addElementsToStringBuilder(el, sb, 0);
             System.out.println(sb);
@@ -171,19 +187,20 @@ public class StringHandler {
         }
     }
 
-    public static void printStringList(List<String> list){
-        for(String current: list){
+    //добавяне на подаден списък от стрингове (използва се като се принтират ид-тата)
+    public static void printIdStringList(List<String> list) {
+        for (String current : list) {
             System.out.println("id=" + current);
         }
     }
 
-    public static void printSingleElement(XMLElement element){
+    //принтиране на един елемент
+    public static void printSingleElement(XMLElement element) {
         StringBuilder sb = new StringBuilder();
         StringHandler.addElementsToStringBuilder(element, sb, 0);
         System.out.println(sb);
         System.out.println();
     }
-
 
 
 }
